@@ -14,20 +14,20 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
-    private String id;
-    @NotBlank(message="{user.name.absent}")
-    private String name;
-    @Email(message="{user.email.absent}")
-    @NotBlank(message="Email is blank")
-    private String email;
-    @NotBlank(message="Password is blank")
-    @Pattern(regexp="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&])(?=\\S+$).{8,15}",message="Password is not valid")
-    private String password;
-    @NotNull
-    private AccountType accountType;
+  private Long id;
+  @NotBlank(message = "{user.name.absent}")
+  private String name;
+  @Email(message = "{user.email.invalid}")
+  @NotBlank(message = "{user.email.absent}")
+  private String email;
+  @NotBlank(message = "{user.password.absent}")
+  @Pattern(regexp = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&])(?=\\S+$).{8,15}", message = "{user.password.invalid}")
+  private String password;
+  @NotNull(message = "{user.accountType.absent}")
+  private AccountType accountType;
 
-      public User toEntity(){
-        return new User(this.id,this.name,this.email,this.password,this.accountType);
-    }
-    
+  public User toEntity() {
+    return new User(this.id, this.name, this.email, this.password, this.accountType);
+  }
+
 }
