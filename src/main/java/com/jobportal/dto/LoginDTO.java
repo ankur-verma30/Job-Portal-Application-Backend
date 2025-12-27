@@ -12,9 +12,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LoginDTO {
     @Email(message = "{user.email.invalid}")
-  @NotBlank(message = "{user.email.absent}")
-  private String email;
-  @NotBlank(message = "{user.password.absent}")
-  @Pattern(regexp = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&])(?=\\S+$).{8,15}", message = "{user.password.invalid}")
-  private String password;
+    @NotBlank(message = "{user.email.absent}")
+    private String email;
+
+    @NotBlank(message = "{user.password.absent}")
+    @Pattern(regexp = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&])(?=\\S+$).{8,15}", message = "{user.password.invalid}")
+    private String password;
 }
