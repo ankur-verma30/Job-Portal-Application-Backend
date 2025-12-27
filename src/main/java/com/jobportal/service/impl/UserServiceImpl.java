@@ -1,6 +1,7 @@
 package com.jobportal.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import com.jobportal.dto.ResponseDTO;
@@ -12,6 +13,7 @@ import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -83,5 +85,29 @@ public class UserServiceImpl implements UserService {
         if(!otpEntity.getOtpCode().equals(otp)) throw  new JobPortalException("INCORRECT_OTP");
         return true;
     }
+
+    @Override
+    public ResponseDTO changePassword(LoginDTO loginDTO) throws JobPortalException {
+        System.out.println("Running changepassword method  "+loginDTO.getEmail());
+        User user = userRepository.findByEmail(loginDTO.getEmail())
+                .orElseThrow(() -> new JobPortalException("USER_NOT_FOUND"));
+
+        user.setPassword(passwordEncoder.encode(loginDTO.getPassword()));
+        userRepository.save(user);
+
+        return new ResponseDTO("Password changed successfully");
+    }
+
+    @Scheduled(fixedRate = 300000)
+    public void removeExpiredOTPs(){
+        LocalDateTime expirationTime=LocalDateTime.now().minusMinutes(5);
+        List<OTP> expiredOTPs = otpRepository.findByCreationTimeBefore(expirationTime);
+
+        if(expiredOTPs.isEmpty()) return;
+        otpRepository.deleteAll(expiredOTPs);
+        int size=expiredOTPs.size();
+        System.out.println("OTPs deleted count "+size);
+    }
+
 
 }

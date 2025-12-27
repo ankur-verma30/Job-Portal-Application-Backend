@@ -52,4 +52,10 @@ public class UserAPI{
         return new ResponseEntity<>(new ResponseDTO("OPT Verified!"),HttpStatus.ACCEPTED);
     }
 
+    @PostMapping("/change-password")
+    public ResponseEntity<ResponseDTO> changePassword (@RequestBody @Valid LoginDTO loginDTO) throws JobPortalException {
+        return new ResponseEntity<>(userService.changePassword(loginDTO),HttpStatus.OK);
+    }
+
+
 }
